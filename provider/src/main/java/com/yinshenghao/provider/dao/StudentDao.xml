@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yinshenghao.provider.dao.StudentDao">
+
+    <select id="selectStudent" resultType="com.yinshenghao.beans.Student">
+        select
+            sid, sno, spwd, sname, sphone, sclassid, clname className
+        from
+            student
+        join
+            class
+        on
+            sclassid = clid
+        where
+            sno = #{sno} or sid = #{sid}
+    </select>
+    
+    <update id="updateSpwd">
+        update
+            student
+        set
+            spwd = #{spwd}
+        where
+            sno = #{sno}
+        or
+            sid = #{sid}
+    </update>
+
+    <select id="selectCourseByPage" resultType="com.yinshenghao.beans.Course">
+        select
+            coid, coname, teacherid, cclassid, tname teacherName, clname className
+        from
+            course
+        join
+            teacher
+        on
+            teacherid = tid
+        join
+            class
+        on
+            cclassid = clid
+        where
+            cclassid = #{student.sclassid}
+        order by
+            coid
+            limit #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectCourseTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            course
+        join
+            teacher
+        on
+            teacherid = tid
+        join
+            class
+        on
+            cclassid = clid
+        where
+            cclassid = #{sclassid}
+    </select>
+
+</mapper>

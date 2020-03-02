@@ -1,0 +1,8 @@
+com\yinshenghao\service\AdminService.class
+com\yinshenghao\beans\Admin.class
+com\yinshenghao\beans\Teacher.class
+com\yinshenghao\beans\Class.class
+com\yinshenghao\service\TeacherService.class
+com\yinshenghao\beans\Student.class
+com\yinshenghao\beans\Course.class
+com\yinshenghao\service\StudentService.class

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/toIndex">首页</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">信息管理<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/stuWork">学生课程查询</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="teaWork">教师课程查询</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="/adminWork">系统管理</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a th:text="${session.get('username') != null}? ${session.get('username') + '，您好'} : '未登录'"></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">账号中心<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/toChgPwd">修改密码</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li th:if="${session.get('username')} != null">
+                                    <a href="/logout">退出</a>
+                                </li>
+                                <li th:if="${session.get('username')} == null">
+                                    <a href="/stuWork">学生登录</a>
+                                </li>
+                                <li class="divider" th:if="${session.get('username')} == null">
+                                </li>
+                                <li th:if="${session.get('username')} == null">
+                                    <a href="/teaWork">教师登录</a>
+                                </li>
+                                <li class="divider" th:if="${session.get('username')} == null">
+                                </li>
+                                <li th:if="${session.get('username')} == null">
+                                    <a href="/adminWork">管理员登录</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+
+        </div>
+    </div>
+
+    <ul id="myTab" class="nav nav-tabs">
+        <li>
+            <a href="#student" data-toggle="tab">
+                学生密码
+            </a>
+        </li>
+        <li>
+            <a href="#teacher" data-toggle="tab">
+                教师密码
+            </a>
+        </li>
+        <li>
+            <a href="#admin" data-toggle="tab">
+                管理员密码
+            </a>
+        </li>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="student">
+            <form class="form-horizontal" role="form" action="/stuChgPwd" method="post">
+                <div class="form-group">
+                    <label for="sno" class="col-sm-2 control-label">账号</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="sno" name="sno"
+                               placeholder="请输入学号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="spwd" class="col-sm-2 control-label">旧密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="spwd" name="spwd"
+                               placeholder="请输入旧密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newspwd" class="col-sm-2 control-label">新密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="newspwd" name="newspwd"
+                               placeholder="请输入新密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stusecond" class="col-sm-2 control-label">确认密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="stusecond"
+                               placeholder="确认密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="teacher">
+            <form class="form-horizontal" role="form" action="/teaChgPwd" method="post">
+                <div class="form-group">
+                    <label for="tno" class="col-sm-2 control-label">账号</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="tno" name="tno"
+                               placeholder="请输入教师编号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tpwd" class="col-sm-2 control-label">旧密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="tpwd" name="tpwd"
+                               placeholder="请输入旧密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newtpwd" class="col-sm-2 control-label">新密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="newtpwd" name="newtpwd"
+                               placeholder="请输入新密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="teasecond" class="col-sm-2 control-label">确认密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="teasecond"
+                               placeholder="确认密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="admin">
+            <form class="form-horizontal" role="form" action="/adminChgPwd" method="post">
+                <div class="form-group">
+                    <label for="ano" class="col-sm-2 control-label">账号</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="ano" name="ano"
+                               placeholder="请输入管理员账号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="apwd" class="col-sm-2 control-label">旧密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="apwd" name="apwd"
+                               placeholder="请输入旧密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newapwd" class="col-sm-2 control-label">新密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="newapwd" name="newapwd"
+                               placeholder="请输入新密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="adminsecond" class="col-sm-2 control-label">确认密码</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="adminsecond"
+                               placeholder="确认密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/toIndex">首页</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">信息管理<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/stuWork">学生课程查询</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="teaWork">教师课程查询</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="/adminWork">系统管理</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a th:text="${session.get('username') != null}? ${session.get('username') + '，您好'} : '未登录'"></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">账号中心<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/toChgPwd">修改密码</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li th:if="${session.get('username')} != null">
+                                    <a href="/logout">退出</a>
+                                </li>
+                                <li th:if="${session.get('username')} == null">
+                                    <a href="/stuWork">学生登录</a>
+                                </li>
+                                <li class="divider" th:if="${session.get('username')} == null">
+                                </li>
+                                <li th:if="${session.get('username')} == null">
+                                    <a href="/teaWork">教师登录</a>
+                                </li>
+                                <li class="divider" th:if="${session.get('username')} == null">
+                                </li>
+                                <li th:if="${session.get('username')} == null">
+                                    <a href="/adminWork">管理员登录</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+
+        </div>
+    </div>
+
+    <ul id="myTab" class="nav nav-tabs">
+        <li>
+            <a href="#student" data-toggle="tab">
+                学生管理
+            </a>
+        </li>
+        <li>
+            <a href="#teacher" data-toggle="tab">
+                教师管理
+            </a>
+        </li>
+        <li>
+            <a href="#course" data-toggle="tab">
+                课程管理
+            </a>
+        </li>
+        <li>
+            <a href="#class" data-toggle="tab">
+                班级管理
+            </a>
+        </li>
+        <li>
+            <a href="#admin" data-toggle="tab">
+                管理员管理
+            </a>
+        </li>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div th:class="${session.get('flag') == 1}? 'tab-pane fade in active' : 'tab-pane fade'" id="student">
+            <table class="table table-striped">
+                <div class="btn-group col-md-offset-10 col-lg-offset-4col-xl-offset-4">
+                    <a href="/findStudents"><button type="button" class="btn btn-primary">查询</button></a>
+                    <a href="/toAddStudent"><button type="button" class="btn btn-primary">添加</button></a>
+                </div>
+                <thead>
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>班级</th>
+                    <th>联系方式</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="student : ${students}">
+                    <td th:text="${student.sno}"></td>
+                    <td th:text="${student.sname}"></td>
+                    <td th:text="${student.className}"></td>
+                    <td th:text="${student.sphone}"></td>
+                    <th>
+                        <a th:href="@{'/toModifyStudent?curPage=' + ${curPage} + '&sid=' + ${student.sid}}">修改</a>
+                        <a th:href="@{'/removeStudent?curPage=' + ${curPage} + '&sid=' + ${student.sid}}">删除</a>
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="btn-group col-md-offset-4 col-lg-offset-4col-xl-offset-4">
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">首页</button></a>
+                <a th:if="${curPage > 1}" href="/findStudents"><button type="button" class="btn btn-primary">首页</button></a>
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">上一页</button></a>
+                <a th:if="${curPage > 1}" th:href="@{'/findStudents?curPage=' + ${curPage - 1}}"><button type="button" class="btn btn-primary">上一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">下一页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findStudents?curPage=' + ${curPage + 1}}"><button type="button" class="btn btn-primary">下一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">尾页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findStudents?curPage=' + ${totalPages}}"><button type="button" class="btn btn-primary">尾页</button></a>
+
+            </div>
+        </div>
+        <div th:class="${session.get('flag') == 2}? 'tab-pane fade in active' : 'tab-pane fade'" id="teacher">
+            <table class="table table-striped">
+                <div class="btn-group col-md-offset-10 col-lg-offset-4col-xl-offset-4">
+                    <a href="/findTeachers"><button type="button" class="btn btn-primary">查询</button></a>
+                    <a href="/toAddTeacher"><button type="button" class="btn btn-primary">添加</button></a>
+                </div>
+                <thead>
+                <tr>
+                    <th>教师编号</th>
+                    <th>姓名</th>
+                    <th>联系方式</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="teacher : ${teachers}">
+                    <td th:text="${teacher.tno}"></td>
+                    <td th:text="${teacher.tname}"></td>
+                    <td th:text="${teacher.tphone}"></td>
+                    <th>
+                        <a th:href="@{'/toModifyTeacher?curPage=' + ${curPage} + '&tid=' + ${teacher.tid}}">修改</a>
+                        <a th:href="@{'/removeTeacher?curPage=' + ${curPage} + '&tid=' + ${teacher.tid}}">删除</a>
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="btn-group col-md-offset-4 col-lg-offset-4col-xl-offset-4">
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">首页</button></a>
+                <a th:if="${curPage > 1}" href="/findTeachers"><button type="button" class="btn btn-primary">首页</button></a>
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">上一页</button></a>
+                <a th:if="${curPage > 1}" th:href="@{'/findTeachers?curPage=' + ${curPage - 1}}"><button type="button" class="btn btn-primary">上一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">下一页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findTeachers?curPage=' + ${curPage + 1}}"><button type="button" class="btn btn-primary">下一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">尾页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findTeachers?curPage=' + ${totalPages}}"><button type="button" class="btn btn-primary">尾页</button></a>
+
+            </div>
+        </div>
+        <div th:class="${session.get('flag') == 3}? 'tab-pane fade in active' : 'tab-pane fade'" id="course">
+            <table class="table table-striped">
+                <div class="btn-group col-md-offset-10 col-lg-offset-4col-xl-offset-4">
+                    <a href="/findCourses"><button type="button" class="btn btn-primary">查询</button></a>
+                    <a href="/toAddCourse"><button type="button" class="btn btn-primary">添加</button></a>
+                </div>
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>班级</th>
+                    <th>主讲教师</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="course : ${courses}">
+                    <td th:text="${course.coname}"></td>
+                    <td th:text="${course.className}"></td>
+                    <td th:text="${course.teacherName}"></td>
+                    <th>
+                        <a th:href="@{'/toModifyCourse?curPage=' + ${curPage} + '&coid=' + ${course.coid}}">修改</a>
+                        <a th:href="@{'/removeCourse?curPage=' + ${curPage} + '&coid=' + ${course.coid}}">删除</a>
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="btn-group col-md-offset-4 col-lg-offset-4col-xl-offset-4">
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">首页</button></a>
+                <a th:if="${curPage > 1}" href="/findCourses"><button type="button" class="btn btn-primary">首页</button></a>
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">上一页</button></a>
+                <a th:if="${curPage > 1}" th:href="@{'/findCourses?curPage=' + ${curPage - 1}}"><button type="button" class="btn btn-primary">上一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">下一页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findCourses?curPage=' + ${curPage + 1}}"><button type="button" class="btn btn-primary">下一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">尾页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findCourses?curPage=' + ${totalPages}}"><button type="button" class="btn btn-primary">尾页</button></a>
+
+            </div>
+        </div>
+        <div th:class="${session.get('flag') == 4}? 'tab-pane fade in active' : 'tab-pane fade'" id="class">
+            <table class="table table-striped">
+                <div class="btn-group col-md-offset-10 col-lg-offset-4col-xl-offset-4">
+                    <a href="/findClasses"><button type="button" class="btn btn-primary">查询</button></a>
+                    <a href="/toAddClass"><button type="button" class="btn btn-primary">添加</button></a>
+                </div>
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="class : ${classes}">
+                    <td th:text="${class.clname}"></td>
+                    <th>
+                        <a th:href="@{'/toModifyClass?curPage=' + ${curPage} + '&clid=' + ${class.clid}}">修改</a>
+                        <a th:href="@{'/removeClass?curPage=' + ${curPage} + '&clid=' + ${class.clid}}">删除</a>
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="btn-group col-md-offset-4 col-lg-offset-4col-xl-offset-4">
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">首页</button></a>
+                <a th:if="${curPage > 1}" href="/findClasses"><button type="button" class="btn btn-primary">首页</button></a>
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">上一页</button></a>
+                <a th:if="${curPage > 1}" th:href="@{'/findClasses?curPage=' + ${curPage - 1}}"><button type="button" class="btn btn-primary">上一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">下一页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findClasses?curPage=' + ${curPage + 1}}"><button type="button" class="btn btn-primary">下一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">尾页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findClasses?curPage=' + ${totalPages}}"><button type="button" class="btn btn-primary">尾页</button></a>
+
+            </div>
+        </div>
+        <div th:class="${session.get('flag') == 5}? 'tab-pane fade in active' : 'tab-pane fade'" id="admin">
+            <table class="table table-striped">
+                <div class="btn-group col-md-offset-10 col-lg-offset-4col-xl-offset-4">
+                    <a href="/findAdmins"><button type="button" class="btn btn-primary">查询</button></a>
+                    <a href="/toAddAdmin"><button type="button" class="btn btn-primary">添加</button></a>
+                </div>
+                <thead>
+                <tr>
+                    <th>管理编号</th>
+                    <th>姓名</th>
+                    <th>联系方式</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="admin : ${admins}">
+                    <td th:text="${admin.ano}"></td>
+                    <td th:text="${admin.aname}"></td>
+                    <td th:text="${admin.aphone}"></td>
+                    <th>
+                        <a th:href="@{'/toModifyAdmin?curPage=' + ${curPage} + '&aid=' + ${admin.aid}}">修改</a>
+                        <a th:href="@{'/removeAdmin?curPage=' + ${curPage} + '&aid=' + ${admin.aid}}">删除</a>
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="btn-group col-md-offset-4 col-lg-offset-4col-xl-offset-4">
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">首页</button></a>
+                <a th:if="${curPage > 1}" href="/findAdmins"><button type="button" class="btn btn-primary">首页</button></a>
+
+                <a th:if="${curPage <= 1}"><button type="button" class="btn btn-primary">上一页</button></a>
+                <a th:if="${curPage > 1}" th:href="@{'/findAdmins?curPage=' + ${curPage - 1}}"><button type="button" class="btn btn-primary">上一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">下一页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findAdmins?curPage=' + ${curPage + 1}}"><button type="button" class="btn btn-primary">下一页</button></a>
+
+                <a th:if="${curPage >= totalPages}"><button type="button" class="btn btn-primary">尾页</button></a>
+                <a th:if="${curPage < totalPages}" th:href="@{'/findAdmins?curPage=' + ${totalPages}}"><button type="button" class="btn btn-primary">尾页</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

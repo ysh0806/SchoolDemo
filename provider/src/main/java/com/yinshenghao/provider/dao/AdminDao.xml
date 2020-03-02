@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yinshenghao.provider.dao.AdminDao">
+
+    <insert id="insertStudent">
+        insert into
+            student (sno, spwd, sname, sphone, sclassid)
+        values
+            (#{sno}, #{spwd}, #{sname}, #{sphone}, (select clid from class where clname = #{className}))
+    </insert>
+
+    <delete id="deleteStudent">
+        delete from
+            student
+        where
+            sid = #{sid}
+    </delete>
+
+    <update id="updateStudent">
+        update
+            student
+        <set>
+            <if test="sno != null and sno != ''">
+                sno = #{sno},
+            </if>
+            <if test="sname != null and sname != ''">
+                sname = #{sname},
+            </if>
+            <if test="className != null and className != ''">
+                sclassid = (select clid from class where clname = #{className}),
+            </if>
+        </set>
+        where
+            sid = #{sid}
+    </update>
+
+    <select id="selectStudent" resultType="com.yinshenghao.beans.Student">
+        select
+            sid, sno, spwd, sname, sphone, sclassid, clname className
+        from
+            student
+        join
+            class
+        on
+            sclassid = clid
+        where
+            sid = #{sid} or sno = #{sno}
+    </select>
+
+    <select id="selectStudentsByPage" resultType="com.yinshenghao.beans.Student">
+        select
+            sid, sno, spwd, sname, sphone, sclassid, clname className
+        from
+            student
+        join
+            class
+        on
+            sclassid = clid
+        order by
+            sid
+            limit #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectStudentsTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            student
+        join
+            class
+        on
+            sclassid = clid
+    </select>
+
+    <insert id="insertTeacher">
+        insert into
+            teacher (tno, tpwd, tname, tphone)
+        values
+            (#{tno}, #{tpwd}, #{tname}, #{tphone})
+    </insert>
+
+    <delete id="deleteTeacher">
+        delete from
+            teacher
+        where
+            tid = #{tid}
+    </delete>
+
+    <update id="updateTeacher">
+        update
+            teacher
+        <set>
+            <if test="tno != null and tno != ''">
+                tno = #{tno},
+            </if>
+            <if test="tname != null and tname != ''">
+                tname = #{tname},
+            </if>
+        </set>
+        where
+            tid = #{tid}
+    </update>
+
+    <select id="selectTeacher" resultType="com.yinshenghao.beans.Teacher">
+        select
+            *
+        from
+            teacher
+        where
+            tid = #{tid} or tno = #{tno}
+    </select>
+
+    <select id="selectTeachersByPage" resultType="com.yinshenghao.beans.Teacher">
+        select
+            *
+        from
+            teacher
+        order by
+            tid
+            limit #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectTeachersTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            teacher
+    </select>
+
+    <insert id="insertAdmin">
+        insert into
+            admin (ano, apwd, aname, aphone)
+        values
+            (#{ano}, #{apwd}, #{aname}, #{aphone})
+    </insert>
+
+    <delete id="deleteAdmin">
+        delete from
+            admin
+        where
+            aid = #{aid}
+    </delete>
+
+    <update id="updateAdmin">
+        update
+            admin
+        <set>
+            <if test="ano != null and ano != ''">
+                ano = #{ano},
+            </if>
+            <if test="aname != null and aname != ''">
+                aname = #{aname},
+            </if>
+            <if test="aphone != null and aphone != ''">
+                aphone = #{aphone},
+            </if>
+        </set>
+        where
+            aid = #{aid}
+    </update>
+
+    <select id="selectAdmin" resultType="com.yinshenghao.beans.Admin">
+        select
+            *
+        from
+            admin
+        where
+            ano = #{ano} or aid = #{aid}
+    </select>
+
+    <select id="selectAdminsByPage" resultType="com.yinshenghao.beans.Admin">
+        select
+            *
+        from
+            admin
+        order by
+            aid
+            limit #{startRow}, #{pageSize}
+    </select>
+    
+    <select id="selectAdminsTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            admin
+    </select>
+
+    <insert id="insertClass">
+        insert into
+            class (clname)
+        values
+            (#{clname})
+    </insert>
+
+    <delete id="deleteClass">
+        delete from
+            class
+        where
+            clid = #{clid}
+    </delete>
+
+    <update id="updateClass">
+        update
+            class
+        set
+            clname = #{clname}
+        where
+            clid = #{clid}
+    </update>
+
+    <select id="selectClass" resultType="com.yinshenghao.beans.Class">
+        select
+            *
+        from
+            class
+        where
+            clid = #{clid} or clname = #{clname}
+    </select>
+
+    <select id="selectClassesByPage" resultType="com.yinshenghao.beans.Class">
+        select
+            *
+        from
+            class
+        order by
+            clid
+            limit #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectClassesTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            class
+    </select>
+
+    <insert id="insertCourse">
+        insert into
+            course (coname, teacherid, cclassid)
+        values
+            (#{coname}, (select tid from teacher where tname = #{teacherName}), (select clid from class where clname = #{className}))
+    </insert>
+
+    <delete id="deleteCourse">
+        delete from
+            course
+        where
+            coid = #{coid}
+    </delete>
+
+    <update id="updateCourse">
+        update
+            course
+        <set>
+            <if test="coname != null and coname != ''">
+                coname = #{coname},
+            </if>
+            <if test="teacherName != null and teacherName != ''">
+                teacherid = (select tid from teacher where tname = #{teacherName}),
+            </if>
+            <if test="className != null and className != ''">
+                cclassid = (select clid from class where clname = #{className}),
+            </if>
+        </set>
+        where
+            coid = #{coid}
+    </update>
+
+    <select id="selectCourse" resultType="com.yinshenghao.beans.Course">
+        select
+            coid, coname, teacherid, cclassid, tname teacherName, clname className
+        from
+            course
+        join
+            teacher
+        on
+            teacherid = tid
+        join
+            class
+        on
+            cclassid = clid
+        where
+            coid = #{coid} or coname = #{coname}
+    </select>
+
+    <select id="selectCoursesByPage" resultType="com.yinshenghao.beans.Course">
+        select
+            coid, coname, teacherid, cclassid, tname teacherName, clname className
+        from
+            course
+        join
+            teacher
+        on
+            teacherid = tid
+        join
+            class
+        on
+            cclassid = clid
+        order by
+            coid
+            limit #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectCoursesTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            course
+        join
+            teacher
+        on
+            teacherid = tid
+        join
+            class
+        on
+            cclassid = clid
+    </select>
+
+</mapper>
