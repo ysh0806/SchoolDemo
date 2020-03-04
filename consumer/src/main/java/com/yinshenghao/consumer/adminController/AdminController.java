@@ -11,10 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,9 +57,12 @@ public class AdminController {
     @PostMapping("/adminChgPwd")
     public String adminChgPwd (Admin admin, String newapwd) {
         Admin adm = adminService.findAdmin(admin);
+        System.out.println(admin);
         if (adm != null && adm.getApwd().equals(admin.getApwd())) {
             adm.setApwd(newapwd);
+            System.out.println(adm);
             int result = adminService.modifyAdmin(adm);
+            System.out.println(result);
             if (result == 1) {
                 return "index";
             }
@@ -656,36 +658,32 @@ public class AdminController {
     public String removeTeacher (Integer tid, Integer curPage, Model model, HttpSession session) {
         Teacher tea = new Teacher();
         tea.setTid(tid);
-        try {
-            if (adminService.removeTeacher(tea) == 1) {
-                if (curPage < 1) {
-                    curPage = 1;
-                }
-                int pageSize = 1;
-                int total = adminService.getTeachersTotal();
-                int totalPages = total / pageSize;
-                if (total % pageSize > 0) {
-                    totalPages = totalPages + 1;
-                }
-                if (curPage > totalPages) {
-                    curPage = totalPages;
-                }
-                int startRow = (curPage - 1) * pageSize;
-
-                Map<String, Object> paramMap = new HashMap<>();
-                paramMap.put("startRow", startRow);
-                paramMap.put("pageSize", pageSize);
-                List<Teacher> teachers = adminService.findTeachersByPage(paramMap);
-
-                model.addAttribute("teachers", teachers);
-                model.addAttribute("curPage", curPage);
-                model.addAttribute("totalPages", totalPages);
-                session.setAttribute("flag", 2);
+        if (adminService.removeTeacher(tea) == 1) {
+            if (curPage < 1) {
+                curPage = 1;
             }
-            return "adminPage";
-        } catch (Exception e) {
-            return "rmTeacherErrorPage";
+            int pageSize = 1;
+            int total = adminService.getTeachersTotal();
+            int totalPages = total / pageSize;
+            if (total % pageSize > 0) {
+                totalPages = totalPages + 1;
+            }
+            if (curPage > totalPages) {
+                curPage = totalPages;
+            }
+            int startRow = (curPage - 1) * pageSize;
+
+            Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put("startRow", startRow);
+            paramMap.put("pageSize", pageSize);
+            List<Teacher> teachers = adminService.findTeachersByPage(paramMap);
+
+            model.addAttribute("teachers", teachers);
+            model.addAttribute("curPage", curPage);
+            model.addAttribute("totalPages", totalPages);
+            session.setAttribute("flag", 2);
         }
+        return "adminPage";
     }
 
     @GetMapping("/removeCourse")
@@ -724,36 +722,32 @@ public class AdminController {
     public String removeClass (Integer clid, Integer curPage, Model model, HttpSession session) {
         Class cla = new Class();
         cla.setClid(clid);
-        try {
-            if (adminService.removeClass(cla) == 1) {
-                if (curPage < 1) {
-                    curPage = 1;
-                }
-                int pageSize = 1;
-                int total = adminService.getClassesTotal();
-                int totalPages = total / pageSize;
-                if (total % pageSize > 0) {
-                    totalPages = totalPages + 1;
-                }
-                if (curPage > totalPages) {
-                    curPage = totalPages;
-                }
-                int startRow = (curPage - 1) * pageSize;
-
-                Map<String, Object> paramMap = new HashMap<>();
-                paramMap.put("startRow", startRow);
-                paramMap.put("pageSize", pageSize);
-                List<Class> classes = adminService.findClassesByPage(paramMap);
-
-                model.addAttribute("classes", classes);
-                model.addAttribute("curPage", curPage);
-                model.addAttribute("totalPages", totalPages);
-                session.setAttribute("flag", 4);
+        if (adminService.removeClass(cla) == 1) {
+            if (curPage < 1) {
+                curPage = 1;
             }
-            return "adminPage";
-        } catch (Exception e) {
-            return "rmClassErrorPage";
+            int pageSize = 1;
+            int total = adminService.getClassesTotal();
+            int totalPages = total / pageSize;
+            if (total % pageSize > 0) {
+                totalPages = totalPages + 1;
+            }
+            if (curPage > totalPages) {
+                curPage = totalPages;
+            }
+            int startRow = (curPage - 1) * pageSize;
+
+            Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put("startRow", startRow);
+            paramMap.put("pageSize", pageSize);
+            List<Class> classes = adminService.findClassesByPage(paramMap);
+
+            model.addAttribute("classes", classes);
+            model.addAttribute("curPage", curPage);
+            model.addAttribute("totalPages", totalPages);
+            session.setAttribute("flag", 4);
         }
+        return "adminPage";
     }
 
     @GetMapping("/removeAdmin")

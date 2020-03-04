@@ -1,17 +1,15 @@
-package com.yinshenghao.consumer.StuController;
+package com.yinshenghao.consumer.stuController;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.yinshenghao.beans.Course;
 import com.yinshenghao.beans.Student;
 import com.yinshenghao.service.StudentService;
-import org.apache.catalina.filters.RemoteIpFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

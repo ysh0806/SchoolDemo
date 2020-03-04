@@ -1,8 +1,7 @@
-package com.yinshenghao.consumer.TeaController;
+package com.yinshenghao.consumer.teaController;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.yinshenghao.beans.Course;
-import com.yinshenghao.beans.Student;
 import com.yinshenghao.beans.Teacher;
 import com.yinshenghao.service.TeacherService;
 import org.springframework.stereotype.Controller;
